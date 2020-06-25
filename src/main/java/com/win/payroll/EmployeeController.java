@@ -23,11 +23,14 @@ class EmployeeController {
     private final EmployeeRepository repository;
 
     private final EmployeeModelAssembler assembler;
+    private final OrderModelAssembler orderAssembler;
 
-    EmployeeController(EmployeeRepository repository, EmployeeModelAssembler assembler) {
+    EmployeeController(EmployeeRepository repository, EmployeeModelAssembler assembler,
+            OrderModelAssembler orderAssembler) {
 
         this.repository = repository;
         this.assembler = assembler;
+        this.orderAssembler = orderAssembler;
     }
 
     // Aggregate root
@@ -47,9 +50,7 @@ class EmployeeController {
 
         EntityModel<Employee> entityModel = assembler.toModel(repository.save(newEmployee));
 
-        return ResponseEntity //
-                .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()) //
-                .body(entityModel);
+        return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
     }
 
     // Single item
@@ -79,9 +80,7 @@ class EmployeeController {
 
         EntityModel<Employee> entityModel = assembler.toModel(updatedEmployee);
 
-        return ResponseEntity //
-                .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()) //
-                .body(entityModel);
+        return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
     }
 
     @DeleteMapping("/employees/{id}")
